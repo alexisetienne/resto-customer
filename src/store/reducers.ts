@@ -5,6 +5,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
 import { InjectedReducersType } from 'utils/types/injector-typings';
+import { orderSlice } from '../app/pages/HomePage/slice';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -16,6 +17,7 @@ export function createReducer(injectedReducers: InjectedReducersType = {}) {
   } else {
     return combineReducers({
       ...injectedReducers,
+      counter: orderSlice.reducer,
     });
   }
 }

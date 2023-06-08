@@ -16,6 +16,7 @@ import { HomePage } from './pages/HomePage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
 import { FormPage } from './pages/FormPage';
+import { OrderPage } from './pages/OrderPage';
 
 export function App() {
   const { i18n } = useTranslation();
@@ -30,6 +31,7 @@ export function App() {
       </Helmet>
 
       <Routes>
+        <Route path="/order" element={<OrderPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/form" element={<FormPage />} />
         <Route path="*" element={<NotFoundPage />} />
