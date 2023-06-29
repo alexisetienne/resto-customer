@@ -16,3 +16,4 @@ command = "yarn run build"
 from = "/*"
 to = "/index.html"
 status = 200
+NODE_VERSION = "16.0.0"
