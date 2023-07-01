@@ -48,7 +48,9 @@ export function HomePage() {
   } = useForm();
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/items/all', { method: 'GET' })
+    fetch('https://order-backend.herokuapp.com/api/items/all', {
+      method: 'GET',
+    })
       .then(handleResponse)
       .then(value => {
         setItems(value);
