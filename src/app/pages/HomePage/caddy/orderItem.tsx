@@ -37,8 +37,11 @@ export function OrderItem({ item }) {
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="column">
-          <Typography variant="body1">{item.title}</Typography>
+          <Typography color="#ff5a5f" variant="body1">
+            {item.title}
+          </Typography>
           <Typography variant="subtitle2">{item.description}</Typography>
+          <Typography variant="body1">{`${item.price}€`}</Typography>
         </Stack>
         <IconButton color="success" onClick={() => addItem(item)}>
           <AddShoppingCartIcon />
