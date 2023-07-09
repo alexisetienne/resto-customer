@@ -17,6 +17,8 @@ import {
   MenuItem,
   SelectChangeEvent,
   Button,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState } from 'react';
@@ -33,6 +35,18 @@ export function OrderPage() {
   const minutes = currentTime.getMinutes();
   const formatTime = hours + ':' + minutes;
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleChange = (event: SelectChangeEvent) => {
     // @ts-ignore
@@ -50,6 +64,7 @@ export function OrderPage() {
   });
 
   const sendOrder = () => {
+    setOpen(true);
     const formatedData = order?.orderItems?.map(data => {
       return { itemId: data.id, quantity: data.quantity };
     });
@@ -58,7 +73,7 @@ export function OrderPage() {
       ...order,
       orderItems: formatedData,
       withdrawalHour: time,
-      status: 'in progress',
+      status: 'new',
       buy: false,
     };
 
@@ -80,6 +95,7 @@ export function OrderPage() {
       .then(() => {
         navigate('/');
         dispatch(reset());
+        window.location.reload();
       });
   };
 
@@ -155,6 +171,7 @@ export function OrderPage() {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={time}
+          required={true}
           label="Séléctionnez l'heure de retrait"
           onChange={handleChange}
         >
@@ -171,9 +188,16 @@ export function OrderPage() {
         variant="outlined"
         color="success"
         sx={{ m: 4 }}
+        disabled={!time}
       >
         Valider ma commande
       </Button>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Nous avons bien reçu votre commande. Un email de confirmation vous a
+          été envoyer !
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 }

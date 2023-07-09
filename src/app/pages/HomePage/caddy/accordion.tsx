@@ -17,14 +17,15 @@ export function Accordion({ items, category }) {
           <AccordionMui>
             <AccordionSummary
               sx={{
-                background:
-                  'linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)',
+                background: '#ff5a5f',
               }}
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={<ExpandMoreIcon color="secondary" />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>{cat}</Typography>
+              <Typography variant="body1" color="#ffffff">
+                {cat}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               {items

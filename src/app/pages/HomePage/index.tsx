@@ -7,8 +7,6 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { isEmpty } from 'lodash';
 
 import { Controller, useForm } from 'react-hook-form';
@@ -17,27 +15,25 @@ import { handleResponse } from '../../../utils/handleResponse';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, updateInfos } from './slice';
 import { Accordion } from './caddy/accordion';
-import { useNavigate } from 'react-router-dom';
 import { OrderPage } from '../OrderPage';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 export function HomePage() {
   const theme = useTheme();
   const [items, setItems] = useState();
+  const order = useSelector((state: RootState) => state.order);
   const [activeStep, setActiveStep] = React.useState(0);
   const [errorMail, setErrorMail] = useState<string>('');
-  const order = useSelector((state: RootState) => state.order);
   const isNextButton = activeStep > 0 && activeStep < 3;
-  console.log(activeStep);
   const regexMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const category = [
-    'starter',
-    'plats',
-    'desserts',
-    'pizza',
-    'vin',
-    'bieres',
-    'boissons',
+    'Entrées',
+    'Plats',
+    'Desserts',
+    'Pizza',
+    'Vin',
+    'Bieres',
+    'Boissons',
   ];
 
   const {
@@ -56,6 +52,12 @@ export function HomePage() {
         setItems(value);
       });
   }, []);
+
+  const nextButtonDisabled = () => {
+    const isEmptyItems = activeStep == 2;
+    const orderItemsIsEmpty = !order.orderItems || isEmpty(order.orderItems);
+    return isEmptyItems && orderItemsIsEmpty;
+  };
 
   const onSubmit = data => {
     dispatch(updateInfos(data));
@@ -78,23 +80,14 @@ export function HomePage() {
         activeStep={activeStep}
         sx={{ maxWidth: 400, flexGrow: 1 }}
         nextButton={
-          <Button size="small" onClick={handleNext} disabled={activeStep === 3}>
-            Next
-            {theme.direction === 'rtl' ? (
-              <KeyboardArrowLeft />
-            ) : (
-              <KeyboardArrowRight />
-            )}
-          </Button>
+          <Typography
+            variant="body1"
+            color="primary"
+          >{`${activeStep}/3`}</Typography>
         }
         backButton={
           <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-            {theme.direction === 'rtl' ? (
-              <KeyboardArrowRight />
-            ) : (
-              <KeyboardArrowLeft />
-            )}
-            Back
+            {theme.direction === 'rtl' ? <ArrowBackIcon /> : <ArrowBackIcon />}
           </Button>
         }
       />
@@ -205,16 +198,21 @@ export function HomePage() {
             )}
             {activeStep == 2 && <Accordion items={items} category={category} />}
             {activeStep == 3 && <OrderPage />}
-
             {isNextButton && (
               <Button
                 size="large"
                 type="submit"
                 variant="contained"
                 color="success"
+                disabled={nextButtonDisabled()}
               >
                 Suivant
               </Button>
+            )}
+            {nextButtonDisabled() && (
+              <Typography color="error" variant="caption">
+                vous devez séléctionner au moins un article
+              </Typography>
             )}
           </Stack>
         </form>
